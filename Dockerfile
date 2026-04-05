@@ -25,5 +25,5 @@ EXPOSE 8501
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8501/ || exit 1
 
-# Run the application with explicit streamlit cache clear
-CMD ["sh", "-c", "streamlit cache clear && streamlit run app.py --server.address 0.0.0.0 --server.port 8501 --server.headless true --server.enableCORS false"]
+# Run both FastAPI backend and Streamlit frontend
+CMD ["sh", "-c", "streamlit cache clear && python -m uvicorn main:app --host 0.0.0.0 --port 8001 & streamlit run app.py --server.address 0.0.0.0 --server.port 8501 --server.headless true --server.enableCORS false"]
