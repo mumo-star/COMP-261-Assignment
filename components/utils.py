@@ -5,12 +5,19 @@ import requests
 def get_api_base_url():
     """
     Returns the base URL for API endpoints.
-    Configured for local development.
+    Configured for both local development and Render deployment.
     
     Returns:
         str: Base URL for the backend API
     """
-    return "http://localhost:8001"
+    # Check if running on Render
+    if "RENDER_EXTERNAL_URL" in st.secrets:
+        # On Render, use the same domain but port 8001 for API
+        base_url = st.secrets["RENDER_EXTERNAL_URL"]
+        return f"{base_url}:8001"
+    else:
+        # Local development
+        return "http://localhost:8001"
 
 def get_auth_headers():
     """
