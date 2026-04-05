@@ -4,7 +4,10 @@ Direct database access utilities for Streamlit frontend
 
 import sqlite3
 import pandas as pd
-from models.database import get_db_connection
+
+def get_db_connection():
+    """Get SQLite database connection"""
+    return sqlite3.connect('student_management.db')
 
 def get_all_students():
     """Get all students from database directly"""
