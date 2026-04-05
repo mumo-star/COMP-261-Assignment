@@ -1,4 +1,4 @@
-# Frontend Dockerfile - Streamlit only
+# Backend Dockerfile - FastAPI only
 FROM python:3.11-slim
 
 # Set working directory
@@ -18,12 +18,12 @@ RUN useradd --create-home --shell /bin/bash app
 RUN chown -R app:app /app
 USER app
 
-# Expose Streamlit port
-EXPOSE 8501
+# Expose FastAPI port
+EXPOSE 8001
 
-# Health check for Streamlit
+# Health check for FastAPI
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8501/ || exit 1
+    CMD curl -f http://localhost:8001/health || exit 1
 
-# Run Streamlit frontend
-CMD ["streamlit", "run", "app.py", "--server.address", "0.0.0.0", "--server.port", "8501", "--server.headless", "true", "--server.enableCORS", "false"]
+# Run FastAPI backend
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]

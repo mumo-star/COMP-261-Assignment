@@ -1,8 +1,6 @@
 import streamlit as st  #Used for UI design
-import requests  #used for making api calls 
 import pandas as pd  #Used for data manipulation
-from components.students import students_page
-from components.utils import get_api_base_url, get_auth_headers, handle_api_error
+from components.students_simple import students_page
 
 #Configure Streamlit page settings
 st.set_page_config(
