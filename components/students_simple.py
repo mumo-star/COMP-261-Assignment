@@ -15,7 +15,7 @@ def students_page():
     
     # Tabbed interface for different operations
     if st.session_state.role == "admin":
-        tab1, tab2, tab3, tab4 = st.tabs(["View Students", "Add Student", "Update Student", "Search Student"])
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(["View Students", "Add Student", "Update Student", "Delete Student", "Search Student"])
         
         with tab1:
             view_students()
@@ -27,6 +27,9 @@ def students_page():
             update_student_tab()
         
         with tab4:
+            delete_student_tab()
+        
+        with tab5:
             search_student()
     else:
         tab1, tab2 = st.tabs(["View Students", "Search Student"])
@@ -54,40 +57,9 @@ def view_students():
             # Display students in a table
             st.dataframe(students_df, use_container_width=True)
             
-            # Admin actions
+            # Note for admin about update/delete tabs
             if st.session_state.role == "admin" and not students_df.empty:
-                st.markdown("### Admin Actions")
-                
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    student_to_update = st.selectbox(
-                        "Select student to update:",
-                        options=students_df['id'].tolist(),
-                        format_func=lambda x: f"ID: {x} - {students_df[students_df['id'] == x]['name'].iloc[0]}"
-                    )
-                
-                with col2:
-                    student_to_delete = st.selectbox(
-                        "Select student to delete:",
-                        options=students_df['id'].tolist(),
-                        format_func=lambda x: f"ID: {x} - {students_df[students_df['id'] == x]['name'].iloc[0]}"
-                    )
-                
-                col3, col4 = st.columns(2)
-                
-                with col3:
-                    if st.button("Update Selected Student", use_container_width=True):
-                        st.session_state.update_student_id = student_to_update
-                        st.rerun()
-                
-                with col4:
-                    if st.button("Delete Selected Student", use_container_width=True):
-                        if delete_student(student_to_delete):
-                            st.success("Student deleted successfully!")
-                            st.rerun()
-                        else:
-                            st.error("Failed to delete student.")
+                st.info("💡 Admin: Use the 'Update Student' and 'Delete Student' tabs to modify student records.")
     
     except Exception as e:
         st.error(f"Error loading students: {str(e)}")
@@ -176,3 +148,41 @@ def search_student():
             st.dataframe(filtered_df, use_container_width=True)
     else:
         st.info("Enter a search term to find students.")
+
+def delete_student_tab():
+    st.markdown("### Delete Student")
+    
+    # Get all students for selection
+    students_df = get_all_students()
+    
+    if students_df.empty:
+        st.info("No students available to delete.")
+        return
+    
+    with st.form("delete_student_form"):
+        student_id = st.selectbox(
+            "Select student to delete:",
+            options=students_df['id'].tolist(),
+            format_func=lambda x: f"ID: {x} - {students_df[students_df['id'] == x]['name'].iloc[0]}"
+        )
+        
+        # Get current student data for confirmation
+        current_student = students_df[students_df['id'] == student_id].iloc[0]
+        
+        # Show student details for confirmation
+        st.markdown("#### Student to Delete:")
+        st.write(f"**Name:** {current_student['name']}")
+        st.write(f"**Registration No:** {current_student['reg_no']}")
+        st.write(f"**Department:** {current_student['department']}")
+        st.write(f"**Age:** {current_student['age']}")
+        
+        st.warning("⚠️ This action cannot be undone!")
+        
+        submitted = st.form_submit_button("Delete Student", use_container_width=True, type="primary")
+        
+        if submitted:
+            if delete_student(student_id):
+                st.success(f"Student '{current_student['name']}' deleted successfully!")
+                st.rerun()
+            else:
+                st.error("Failed to delete student. Please try again.")
