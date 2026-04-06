@@ -14,33 +14,27 @@ A simplified system to digitize student record handling with role-based access c
 ### Technical Features
 - **Streamlit Frontend**: Modern web interface with Python framework.
 - **SQLite Database**: Lightweight, file-based database with auto-initialization.
-- **Direct Database Access**: No backend API needed - simplified architecture.
+- **Direct Database Access**: No backend API needed.
 - **Error Handling**: Comprehensive error messages and validation.
 - **Docker Support**: Containerized deployment ready.
 
 ## Project Structure
+- app.py- Main Streamlit application
+- requirements.txt- Python dependencies
+- Dockerfile- Docker configuration for deployment
+- README.md- Project documentation
+- .streamlit/- Streamlit configuration
+- secrets.toml- Secrets for deployment
+- students_simple.py- Student management interface
+- database_utils.py- Database operations
+- student_management.db- SQLite database (auto-created)
 
-```
-SMS App/
-├── app.py                 # Main Streamlit application
-├── requirements.txt       # Python dependencies
-├── Dockerfile            # Docker configuration for deployment
-├── README.md             # Project documentation
-├── .streamlit/           # Streamlit configuration
-│   └── secrets.toml      # Secrets for deployment
-├── components/           # UI components
-│   ├── __init__.py
-│   ├── students_simple.py    # Student management interface
-│   └── database_utils.py     # Database operations
-└── student_management.db # SQLite database (auto-created)
-```
 
 ## Installation
 
 ### Prerequisites
 - Python 3.8 or higher
 - pip package manager
-- Docker (optional, for deployment)
 
 ### Local Development
 
@@ -60,40 +54,6 @@ SMS App/
    ```
 
    The application will be available at: http://localhost:8501
-
-## Deployment
-
-### Render Deployment
-
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Ready for deployment"
-   git push origin master
-   ```
-
-2. **Deploy on Render**
-   - Go to [render.com](https://render.com)
-   - Connect your GitHub repository
-   - Create Web Service with Docker runtime
-   - Render will auto-detect your Dockerfile
-
-3. **Configuration**
-   - Name: `sms-student-management`
-   - Runtime: Docker
-   - Instance Type: Free (to start)
-
-### Docker Deployment
-
-1. **Build Docker image**
-   ```bash
-   docker build -t sms-app .
-   ```
-
-2. **Run container**
-   ```bash
-   docker run -p 8501:8501 sms-app
-   ```
 
 ## Usage
 
@@ -138,19 +98,19 @@ SMS App/
 
 ### Common Issues
 
-1. **Port Already in Use**
+ **Port Already in Use**
    - Change port: `streamlit run app.py --server.port 8502`
    - Kill existing processes on the port
 
-2. **Database Connection Error**
+ **Database Connection Error**
    - Database auto-creates on first run
    - Check file permissions for `student_management.db`
 
-3. **Import Errors**
+ **Import Errors**
    - Install all dependencies: `pip install -r requirements.txt`
    - Check Python version (3.8+ required)
 
-4. **Deployment Issues**
+ **Deployment Issues**
    - Ensure `.streamlit/secrets.toml` exists
    - Check Dockerfile configuration
    - Verify all files are pushed to GitHub

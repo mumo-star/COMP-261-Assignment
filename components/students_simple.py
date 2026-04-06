@@ -59,7 +59,7 @@ def view_students():
             
             # Note for admin about update/delete tabs
             if st.session_state.role == "admin" and not students_df.empty:
-                st.info("💡 Admin: Use the 'Update Student' and 'Delete Student' tabs to modify student records.")
+                st.info(" Admin: Use the 'Update Student' and 'Delete Student' tabs to modify student records.")
     
     except Exception as e:
         st.error(f"Error loading students: {str(e)}")
@@ -176,7 +176,7 @@ def delete_student_tab():
         st.write(f"**Department:** {current_student['department']}")
         st.write(f"**Age:** {current_student['age']}")
         
-        st.warning("⚠️ This action cannot be undone!")
+        st.warning("This action cannot be undone!")
         
         submitted = st.form_submit_button("Delete Student", use_container_width=True, type="primary")
         
