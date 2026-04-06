@@ -97,15 +97,15 @@ def add_student_form():
     
     with st.form("add_student_form"):
         name = st.text_input("Full Name*", placeholder="Enter student's full name")
-        email = st.text_input("Email*", placeholder="Enter student's email")
-        course = st.text_input("Course*", placeholder="Enter course name")
+        reg_no = st.text_input("Registration Number*", placeholder="Enter registration number")
+        department = st.text_input("Department*", placeholder="Enter department name")
         age = st.number_input("Age*", min_value=16, max_value=100, value=18)
         
         submitted = st.form_submit_button("Add Student", use_container_width=True)
         
         if submitted:
-            if name and email and course:
-                if add_student(name, email, course, age):
+            if name and reg_no and department:
+                if add_student(name, reg_no, department, age):
                     st.success(f"Student '{name}' added successfully!")
                     st.rerun()
                 else:
@@ -134,15 +134,15 @@ def update_student_tab():
         current_student = students_df[students_df['id'] == student_id].iloc[0]
         
         name = st.text_input("Full Name*", value=current_student['name'])
-        email = st.text_input("Email*", value=current_student['email'])
-        course = st.text_input("Course*", value=current_student['course'])
+        reg_no = st.text_input("Registration Number*", value=current_student['reg_no'])
+        department = st.text_input("Department*", value=current_student['department'])
         age = st.number_input("Age*", min_value=16, max_value=100, value=int(current_student['age']))
         
         submitted = st.form_submit_button("Update Student", use_container_width=True)
         
         if submitted:
-            if name and email and course:
-                if update_student(student_id, name, email, course, age):
+            if name and reg_no and department:
+                if update_student(student_id, name, reg_no, department, age):
                     st.success(f"Student '{name}' updated successfully!")
                     st.rerun()
                 else:
@@ -153,7 +153,7 @@ def update_student_tab():
 def search_student():
     st.markdown("### Search Students")
     
-    search_term = st.text_input("Search by name, email, or course:", placeholder="Enter search term...")
+    search_term = st.text_input("Search by name, registration number, or department:", placeholder="Enter search term...")
     
     if search_term:
         students_df = get_all_students()
@@ -165,8 +165,8 @@ def search_student():
         # Filter students based on search term
         filtered_df = students_df[
             students_df['name'].str.contains(search_term, case=False, na=False) |
-            students_df['email'].str.contains(search_term, case=False, na=False) |
-            students_df['course'].str.contains(search_term, case=False, na=False)
+            students_df['reg_no'].str.contains(search_term, case=False, na=False) |
+            students_df['department'].str.contains(search_term, case=False, na=False)
         ]
         
         if filtered_df.empty:

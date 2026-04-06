@@ -13,20 +13,20 @@ def get_all_students():
     """Get all students from database directly"""
     try:
         conn = get_db_connection()
-        df = pd.read_sql_query("SELECT * FROM students ORDER BY id", conn)
+        df = pd.read_sql_query("SELECT id, name, age, reg_no, department FROM students ORDER BY id", conn)
         conn.close()
         return df
     except Exception as e:
         return pd.DataFrame()
 
-def add_student(name, email, course, age):
+def add_student(name, reg_no, department, age):
     """Add student directly to database"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO students (name, email, course, age) VALUES (?, ?, ?, ?)",
-            (name, email, course, age)
+            "INSERT INTO students (name, reg_no, department, age) VALUES (?, ?, ?, ?)",
+            (name, reg_no, department, age)
         )
         conn.commit()
         conn.close()
@@ -34,14 +34,14 @@ def add_student(name, email, course, age):
     except Exception as e:
         return False
 
-def update_student(student_id, name, email, course, age):
+def update_student(student_id, name, reg_no, department, age):
     """Update student directly in database"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE students SET name=?, email=?, course=?, age=? WHERE id=?",
-            (name, email, course, age, student_id)
+            "UPDATE students SET name=?, reg_no=?, department=?, age=? WHERE id=?",
+            (name, reg_no, department, age, student_id)
         )
         conn.commit()
         conn.close()
